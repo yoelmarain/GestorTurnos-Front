@@ -1,4 +1,5 @@
 import ErrorPage from './pages/Error';
+import LoginPage from './pages/LoginPage';
 
 const routes = [
     {
@@ -6,6 +7,12 @@ const routes = [
         element: <ErrorPage />,
         title: 'error',
         rol: 'public'
+    },
+    {
+        path: '/login',
+        element: <LoginPage />,
+        title: 'login',
+        rol: 'auth'
     }
 ]
 
