@@ -1,8 +1,12 @@
-import ListaServicios from "@/components/ListaServicios";
+import { useState } from 'react';
+import ListaServicios from "@/components/Reservar/ListaServicios";
 import BlurText from "@/components/BlurText";
+import ListaProfesionales from "@/components/Reservar/ListaProfesionales";
 
 export default function ReservasPage() {
 
+    const [servicioSeleccionado, setServicioSeleccionado] = useState<number | null>(null);
+    const [profesionalSeleccionado, setProfesionalSeleccionado] = useState<number | null>(null);
 
     const handleAnimationComplete = () => {
         console.log('Animation completed!');
@@ -19,7 +23,16 @@ export default function ReservasPage() {
             onAnimationComplete={handleAnimationComplete}
             />
             </div>
-            <ListaServicios />
+            <ListaServicios 
+                servicioSeleccionado={servicioSeleccionado}
+                setServicioSeleccionado={setServicioSeleccionado}
+            />
+            { servicioSeleccionado &&
+            <ListaProfesionales 
+                profesionalSeleccionado={profesionalSeleccionado}
+                setProfesionalSeleccionado={setProfesionalSeleccionado}
+            />
+    }
         </div>
     );
 }
