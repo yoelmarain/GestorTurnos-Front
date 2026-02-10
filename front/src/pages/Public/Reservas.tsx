@@ -2,6 +2,8 @@ import { useState } from 'react';
 import ListaServicios from "@/components/Reservar/ListaServicios";
 import BlurText from "@/components/BlurText";
 import ListaProfesionales from "@/components/Reservar/ListaProfesionales";
+import SeleccionadorSlot from '@/components/Reservar/FechasyHorarios';
+import TurnosLibres from '@/API/Public/SacarTurno';
 
 export default function ReservasPage() {
 
@@ -33,6 +35,11 @@ export default function ReservasPage() {
                 setProfesionalSeleccionado={setProfesionalSeleccionado}
             />
     }
+    { profesionalSeleccionado && servicioSeleccionado && (
+        <SeleccionadorSlot 
+            slots_disponibles={TurnosLibres["slots_disponibles"]}
+        />
+    )}
         </div>
     );
 }

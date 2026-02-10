@@ -24,7 +24,7 @@ export default function ListaServicios({ servicioSeleccionado, setServicioSelecc
                 {servicios.map((servicio, index) => (
                     <Card 
                         key={index} 
-                        className={` flex flex-col gap-2 p-6 bg-gray-800/80 hover:border-gray-400 hover:scale-105 hover:shadow-xl transition-all duration-300 cursor-pointer ${servicio.id === servicioSeleccionado ? 'border-gray-400 scale-105 shadow-xl bg-slate-600' : ''}`}
+                        className={` flex flex-col gap-2 p-6 bg-gray-800/80 border border-gray-600 hover:scale-105 hover:shadow-xl transition-all duration-300 cursor-pointer ${servicio.id === servicioSeleccionado ? 'border-gray-400 scale-105 shadow-xl bg-slate-600' : ''}`}
                         onClick={() => setServicioSeleccionado(servicio.id)}
                     >
                             <h3 className="text-xl font-semibold text-white">
