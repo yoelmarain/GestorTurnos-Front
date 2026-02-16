@@ -25,6 +25,7 @@ export default function SeleccionadorSlot({ slots_disponibles }: Props) {
   ).map(date => new Date(date)); //Se lo vuelve a convertir a Array y luego a Date a cada objeto del array para que el componente Calendar pueda reconocerlo como fecha válida
 
   // Filtrar slots del día seleccionado
+  // NO hace falta un useEffect ya que es una variable calculada que se recalcula automáticamente en cada render (se vuelve a rendizar cada vez que cambia el estado, el selectedDay).
   const slotsForSelectedDate = selectedDate
     ? slots_disponibles.filter(   // filtra y se queda solo con los slots del dia seleccionado
         (slot) =>  // para recorrer
@@ -33,8 +34,12 @@ export default function SeleccionadorSlot({ slots_disponibles }: Props) {
       )
     : [];
 
+  console.log(slotsForSelectedDate)
+
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-col p-4">
+      <h2 className="text-2xl text-white font-bold mb-2">Seleccionar Horario</h2>
+      <div className="flex justify-center">
       <Calendar
         mode="single"   // permite seleccionar solo una fecha y no rangos
         selected={selectedDate}   // dia que va a aparecer seleccionado en el calendario
@@ -46,14 +51,12 @@ export default function SeleccionadorSlot({ slots_disponibles }: Props) {
               date.toISOString().split('T')[0]  // compara si el array con fechas disponibles es igual al dia del calendario que se esta evaluando (date)
           )
         }
-        className="rounded-md border"
+        className="rounded-md border w-full max-w-xl p-4"
       />
-      
+      </div>
+
       {selectedDate && (
-        <div className="flex-1">
-          <h3 className="font-semibold mb-2">
-            Horarios disponibles - {format(selectedDate, 'dd/MM/yyyy')}
-          </h3>
+        <div className="flex-1 mt-8">
           <div className="grid grid-cols-3 gap-2">
             {slotsForSelectedDate.map((slot, index) => (
               <button
@@ -61,7 +64,7 @@ export default function SeleccionadorSlot({ slots_disponibles }: Props) {
                 // onClick={() => onSelectSlot(slot)}
                 className="px-4 py-2 border rounded hover:bg-primary hover:text-primary-foreground"
               >
-                {format(new Date(slot.start), 'HH:mm')}
+                <span className=" text-white font-medium">{slot.start.slice(11, 16)}</span> -
               </button>
             ))}
           </div>

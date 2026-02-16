@@ -25,6 +25,7 @@ export default function ReservasPage() {
             onAnimationComplete={handleAnimationComplete}
             />
             </div>
+            <div className="flex flex-col justify-center gap-2 mt-8">
             <ListaServicios 
                 servicioSeleccionado={servicioSeleccionado}
                 setServicioSeleccionado={setServicioSeleccionado}
@@ -34,12 +35,15 @@ export default function ReservasPage() {
                 profesionalSeleccionado={profesionalSeleccionado}
                 setProfesionalSeleccionado={setProfesionalSeleccionado}
             />
-    }
-    { profesionalSeleccionado && servicioSeleccionado && (
-        <SeleccionadorSlot 
-            slots_disponibles={TurnosLibres["slots_disponibles"]}
-        />
-    )}
+            }
+            { profesionalSeleccionado && servicioSeleccionado && (
+                <div className="flex flex-col justify-center">
+                <SeleccionadorSlot 
+                    slots_disponibles={TurnosLibres.slots_disponibles}
+                />
+                </div>
+            )}
+            </div>
         </div>
     );
 }
