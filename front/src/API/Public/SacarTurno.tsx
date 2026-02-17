@@ -1,5 +1,11 @@
 
-
+const PostTurno = {
+  "fecha_turno": "2026-02-16T23:44:35.717Z",
+  "estado": "string",
+  "cliente": 0,
+  "profesional": 0,
+  "servicio": 0
+}
 
 const TurnosLibres = {
   "profesional_id": "1",

@@ -9,10 +9,11 @@ interface Slot {
 
 interface Props {
   slots_disponibles: Slot[];
-  // onSelectSlot: (slot: Slot) => void;
+  slotSeleccionado: Slot | null;
+  setSlotSeleccionado: (slot: Slot) => void;
 }
 
-export default function SeleccionadorSlot({ slots_disponibles }: Props) {
+export default function SeleccionadorSlot({ slots_disponibles, slotSeleccionado, setSlotSeleccionado }: Props) {
   const [selectedDate, setSelectedDate] = useState<Date>();
 
   // Extraer días únicos con slots disponibles
@@ -34,7 +35,6 @@ export default function SeleccionadorSlot({ slots_disponibles }: Props) {
       )
     : [];
 
-  console.log(slotsForSelectedDate)
 
   return (
     <div className="flex flex-col p-4">
@@ -61,8 +61,9 @@ export default function SeleccionadorSlot({ slots_disponibles }: Props) {
             {slotsForSelectedDate.map((slot, index) => (
               <button
                 key={index}
-                // onClick={() => onSelectSlot(slot)}
-                className="px-4 py-2 border rounded hover:bg-primary hover:text-primary-foreground"
+                onClick={() => setSlotSeleccionado(slot)} // Aquí puedes llamar a onSelectSlot(slot) si quieres pasar el slot seleccionado al componente padre
+                //onClick={() => console.log("slot sleccionado")}
+                className={`px-4 py-2 border rounded hover:bg-primary hover:text-primary-foreground ${slotSeleccionado?.start === slot.start ? 'border-gray-400 scale-105 shadow-xl bg-slate-600' : ''}`}
               >
                 <span className=" text-white font-medium">{slot.start.slice(11, 16)}</span> -
               </button>
