@@ -1,20 +1,56 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ListaServicios from "@/components/Reservar/ListaServicios";
 import BlurText from "@/components/BlurText";
 import ListaProfesionales from "@/components/Reservar/ListaProfesionales";
 import SeleccionadorSlot from '@/components/Reservar/FechasyHorarios';
-import TurnosLibres from '@/API/Public/SacarTurno';
+import { getSlots, reservarTurno} from '@/API/Public/SacarTurno';
 import { Button } from '@/components/ui/button';
+import { se } from 'date-fns/locale';
+
+interface Slot {
+    start: string;
+    end: string;
+}
+
+interface Respuesta {
+    profesional_id: string;
+    servicio_id: string;
+    slots_disponibles: Slot[];
+}
 
 export default function ReservasPage() {
 
     const [servicioSeleccionado, setServicioSeleccionado] = useState<number | null>(null);
     const [profesionalSeleccionado, setProfesionalSeleccionado] = useState<number | null>(null);
+    const [slotsDisponibles, setSlotsDisponibles] = useState<Respuesta | null>(null);
     const [slotSeleccionado, setSlotSeleccionado] = useState<{start: string, end: string} | null>(null);
 
-    const ReservarTurno = () => {
-        console.log('Aca se hace la llamadaa a la API');
+    const ReservarTurno = async () => {
+        if (!slotSeleccionado || !profesionalSeleccionado || !servicioSeleccionado) {
+            return;
+        }
+        try {
+            await reservarTurno(slotSeleccionado.start, profesionalSeleccionado, servicioSeleccionado);
+            alert('Turno reservado con éxito'); // VER
+            window.location.reload();
+        } catch (error) {
+            alert('Error al reservar el turno: ' + error);
+        }
     };
+
+    useEffect(() => {
+        const fetchSlots = async () => {
+            try {
+                const data = await getSlots(profesionalSeleccionado!, servicioSeleccionado!);
+                setSlotsDisponibles(data);
+            } catch (error) {
+                console.error('Error fetching slots:', error);
+            }
+        };
+        if (profesionalSeleccionado && servicioSeleccionado) {
+            fetchSlots();
+        }
+    }, [profesionalSeleccionado]);
 
     return (
         <div className="p-4">
@@ -41,7 +77,7 @@ export default function ReservasPage() {
             { profesionalSeleccionado && (
                 <div className="flex flex-col justify-center">
                 <SeleccionadorSlot 
-                    slots_disponibles={TurnosLibres.slots_disponibles}
+                    slots_disponibles={slotsDisponibles?.slots_disponibles || []}
                     slotSeleccionado={slotSeleccionado}
                     setSlotSeleccionado={setSlotSeleccionado}
                 />

@@ -1,9 +1,17 @@
-import servicios from '../../API/Public/Servicios';
+import {getServicios} from '../../API/Public/Servicios';
 import { Card } from '../ui/card';
+import { use, useEffect, useState } from 'react';
 
 interface ListaServiciosProps {
     servicioSeleccionado: number | null;
     setServicioSeleccionado: (id: number) => void;
+}
+
+interface Servicio {
+    id: number;
+    nombre_servicio: string;
+    duracion_minutos: number;
+    precio: string;
 }
 
 export default function ListaServicios({ servicioSeleccionado, setServicioSeleccionado }: ListaServiciosProps) {
@@ -15,6 +23,20 @@ export default function ListaServicios({ servicioSeleccionado, setServicioSelecc
             minimumFractionDigits: 0
         }).format(price);
     };
+
+    const [servicios, setServicios] = useState<Servicio[]>([]);
+
+    useEffect(() => {
+        const fetchServicios = async () => {
+            try {
+                const data = await getServicios();
+                setServicios(data);
+            } catch (error) {
+                console.error('Error fetching servicios:', error);
+            }
+        };
+        fetchServicios();
+    }, []);
 
 
     return (
@@ -33,7 +55,7 @@ export default function ListaServicios({ servicioSeleccionado, setServicioSelecc
                             <div className="flex items-center gap-2">
                                 <span className="text-sm text-gray-300">Precio:</span>
                                 <span className="text-lg font-bold text-slate-700 bg-slate-400 px-3 py-1 rounded">
-                                    {formatPrice(servicio.precio)}
+                                    {formatPrice(Number(servicio.precio))}
                                 </span>
                             </div>
                     </Card>
