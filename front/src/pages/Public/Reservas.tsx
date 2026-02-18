@@ -5,7 +5,8 @@ import ListaProfesionales from "@/components/Reservar/ListaProfesionales";
 import SeleccionadorSlot from '@/components/Reservar/FechasyHorarios';
 import { getSlots, reservarTurno} from '@/API/Public/SacarTurno';
 import { Button } from '@/components/ui/button';
-import { se } from 'date-fns/locale';
+import { toast } from "sonner"
+
 
 interface Slot {
     start: string;
@@ -31,7 +32,8 @@ export default function ReservasPage() {
         }
         try {
             await reservarTurno(slotSeleccionado.start, profesionalSeleccionado, servicioSeleccionado);
-            alert('Turno reservado con éxito'); // VER
+            // alert('Turno reservado con éxito'); // VER
+            sessionStorage.setItem("turno_ok", "1")
             window.location.reload();
         } catch (error) {
             alert('Error al reservar el turno: ' + error);
