@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import PublicLayout from './layout/Public';
 import AuthLayout from './layout/Auth';
+import AdminLayout from './layout/Admin';
 import { Toaster } from "@/components/ui/sonner"
 import { useEffect } from 'react';
 import { toast } from "sonner"
@@ -34,20 +35,21 @@ function App() {
       <Routes>
         <Route path="/auth/*" element={<AuthLayout />} />
         <Route path="/public/*" element={<PublicLayout />} />
+        <Route path="/admin/*" element={<AdminLayout />} />
         <Route path="/" element={<Navigate to="/public/error" replace />} />
       </Routes>
-     <Toaster 
-      position="top-center"
-      richColors
-      toastOptions={{
-        classNames: {
-          success: "bg-emerald-600 text-white",
-          error: "bg-red-600 text-white",
-          warning: "bg-yellow-500 text-black",
-          info: "bg-blue-600 text-white",
-        },
-      }}
-     />
+      <Toaster 
+        position="top-center"
+        richColors
+        toastOptions={{
+          classNames: {
+            success: "bg-emerald-600 text-white",
+            error: "bg-red-600 text-white",
+            warning: "bg-yellow-500 text-black",
+            info: "bg-blue-600 text-white",
+          },
+        }}
+      />
     </BrowserRouter>
   </>
   )

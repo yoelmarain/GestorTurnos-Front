@@ -5,8 +5,6 @@ import ListaProfesionales from "@/components/Reservar/ListaProfesionales";
 import SeleccionadorSlot from '@/components/Reservar/FechasyHorarios';
 import { getSlots, reservarTurno} from '@/API/Public/SacarTurno';
 import { Button } from '@/components/ui/button';
-import { toast } from "sonner"
-
 
 interface Slot {
     start: string;
