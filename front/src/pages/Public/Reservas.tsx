@@ -34,6 +34,7 @@ export default function ReservasPage() {
             await reservarTurno(slotSeleccionado.start, profesionalSeleccionado, servicioSeleccionado);
             // alert('Turno reservado con éxito'); // VER
             sessionStorage.setItem("turno_ok", "1")
+            sessionStorage.setItem("turno_hora", slotSeleccionado.start)
             window.location.reload();
         } catch (error) {
             alert('Error al reservar el turno: ' + error);
