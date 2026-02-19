@@ -11,57 +11,44 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { updateServicio } from "@/API/Public/Servicios"
+import { createServicio } from "@/API/Public/Servicios"
 import { toast } from "sonner"
-import { useState, useEffect } from "react"
-
-interface Servicio {
-  id: number;
-  nombre_servicio: string;
-  duracion_minutos: number;
-  precio: string;
-}
+import { useState } from "react"
 
 interface Props {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    servicio: Servicio | null;
-    onServicioActualizado: () => void;
+    onServicioCreado: () => void;
 }
 
-export function EditarServicio({ open, onOpenChange, servicio, onServicioActualizado }: Props) {
+export function AgregarServicio({ open, onOpenChange, onServicioCreado }: Props) {
   const [nombreServicio, setNombreServicio] = useState("");
-  const [duracionMinutos, setDuracionMinutos] = useState(0);
+  const [duracionMinutos, setDuracionMinutos] = useState(30);
   const [precio, setPrecio] = useState("");
 
-  useEffect(() => {
-    if (servicio) {
-      setNombreServicio(servicio.nombre_servicio);
-      setDuracionMinutos(servicio.duracion_minutos);
-      setPrecio(servicio.precio);
-    }
-  }, [servicio]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    
-    if (!servicio) return;
 
     try {
-      await updateServicio(servicio.id, {
+      await createServicio({
         nombre_servicio: nombreServicio,
         duracion_minutos: duracionMinutos,
         precio: precio,
       });
       
-      toast.success("Servicio actualizado con éxito", {
+      toast.success("Servicio creado con éxito", {
         position: "top-center",
       });
       
-      onServicioActualizado();
+      // Reset form
+      setNombreServicio("");
+      setDuracionMinutos(30);
+      setPrecio("");
+      
+      onServicioCreado();  // para actualizar la tabla 
       onOpenChange(false);
     } catch (error) {
-      toast.error("Error al actualizar el servicio", {
+      toast.error("Error al crear el servicio", {
         description: String(error),
         position: "top-center",
       });
@@ -70,12 +57,12 @@ export function EditarServicio({ open, onOpenChange, servicio, onServicioActuali
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-sm bg-gray-900 border-gray-700">
+      <DialogContent className="sm:max-w-sm bg-gray-900 border-gray-700 gap-6">
         <form onSubmit={handleSubmit}>
-          <DialogHeader className="mb-4">
-            <DialogTitle className="text-white">Editar Servicio</DialogTitle>
+          <DialogHeader className="mb-4"> 
+            <DialogTitle className="text-white">Agregar Servicio</DialogTitle>
             <DialogDescription className="text-gray-400">
-              Modifica los datos del servicio. Haz clic en guardar cuando termines.
+              Completa los datos del nuevo servicio. Haz clic en guardar cuando termines.
             </DialogDescription>
           </DialogHeader>
           <FieldGroup>
@@ -87,6 +74,7 @@ export function EditarServicio({ open, onOpenChange, servicio, onServicioActuali
                 value={nombreServicio}
                 onChange={(e) => setNombreServicio(e.target.value)}
                 className="text-white bg-gray-800 border-gray-600"
+                placeholder="Ej: Corte de cabello"
                 required
               />
             </Field>
@@ -111,6 +99,7 @@ export function EditarServicio({ open, onOpenChange, servicio, onServicioActuali
                 value={precio}
                 onChange={(e) => setPrecio(e.target.value)}
                 className="text-white bg-gray-800 border-gray-600"
+                placeholder="Ej: 5000"
                 required
               />
             </Field>
@@ -119,7 +108,7 @@ export function EditarServicio({ open, onOpenChange, servicio, onServicioActuali
             <DialogClose asChild>
               <Button variant="outline" type="button">Cancelar</Button>
             </DialogClose>
-            <Button type="submit" className="bg-green-600 hover:bg-green-700">Guardar cambios</Button>
+            <Button type="submit" className="bg-green-600 hover:bg-green-700">Guardar</Button>
           </DialogFooter>
         </form>
       </DialogContent>
