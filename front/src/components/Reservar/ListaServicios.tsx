@@ -1,6 +1,7 @@
-import {getServicios} from '../../API/Public/Servicios';
+import { getServicios } from '../../API/Public/Servicios';
 import { Card } from '../ui/card';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Scissors, Clock, CheckCircle2, DollarSign } from 'lucide-react';
 
 interface ListaServiciosProps {
     servicioSeleccionado: number | null;
@@ -17,8 +18,8 @@ interface Servicio {
 export default function ListaServicios({ servicioSeleccionado, setServicioSeleccionado }: ListaServiciosProps) {
 
     const formatPrice = (price: number) => {
-        return new Intl.NumberFormat('es-CL', { 
-            style: 'currency', 
+        return new Intl.NumberFormat('es-CL', {
+            style: 'currency',
             currency: 'CLP',
             minimumFractionDigits: 0
         }).format(price);
@@ -38,28 +39,48 @@ export default function ListaServicios({ servicioSeleccionado, setServicioSelecc
         fetchServicios();
     }, []);
 
-
     return (
         <div className="p-4">
-            <h2 className="text-2xl text-white font-bold mb-2">Seleccionar Servicio</h2>
+            <div className="flex items-center gap-2 mb-4">
+                <div className="bg-blue-500/20 p-2 rounded-lg">
+                    <Scissors className="w-5 h-5 text-blue-400" />
+                </div>
+                <h2 className="text-2xl text-white font-bold">Seleccioná un servicio</h2>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {servicios.map((servicio, index) => (
-                    <Card 
-                        key={index} 
-                        className={` flex flex-col gap-2 p-6 bg-gray-800/80 border border-gray-600 hover:scale-105 hover:shadow-xl transition-all duration-300 cursor-pointer ${servicio.id === servicioSeleccionado ? 'border-gray-400 scale-105 shadow-xl bg-slate-600' : ''}`}
-                        onClick={() => setServicioSeleccionado(servicio.id)}
-                    >
-                            <h3 className="text-xl font-semibold text-white">
+                {servicios.map((servicio) => {
+                    const seleccionado = servicio.id === servicioSeleccionado;
+                    return (
+                        <Card
+                            key={servicio.id}
+                            className={`relative flex flex-col gap-3 p-5 cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 ${
+                                seleccionado
+                                    ? 'bg-blue-600/20 border-blue-500 shadow-lg shadow-blue-500/10'
+                                    : 'bg-gray-800/80 border-gray-700 hover:border-gray-500'
+                            }`}
+                            onClick={() => setServicioSeleccionado(servicio.id)}
+                        >
+                            {seleccionado && (
+                                <div className="absolute top-3 right-3">
+                                    <CheckCircle2 className="w-5 h-5 text-blue-400" />
+                                </div>
+                            )}
+                            <h3 className="text-lg font-semibold text-white pr-6">
                                 {servicio.nombre_servicio}
                             </h3>
-                            <div className="flex items-center gap-2">
-                                <span className="text-sm text-gray-300">Precio:</span>
-                                <span className="text-lg font-bold text-slate-700 bg-slate-400 px-3 py-1 rounded">
+                            <div className="flex items-center gap-3 flex-wrap">
+                                <span className="flex items-center gap-1.5 text-sm font-semibold bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full">
+                                    <DollarSign className="w-3.5 h-3.5" />
                                     {formatPrice(Number(servicio.precio))}
                                 </span>
+                                <span className="flex items-center gap-1.5 text-sm text-slate-400 bg-slate-800/60 px-3 py-1 rounded-full">
+                                    <Clock className="w-3.5 h-3.5" />
+                                    {servicio.duracion_minutos} min
+                                </span>
                             </div>
-                    </Card>
-                ))}
+                        </Card>
+                    );
+                })}
             </div>
         </div>
     );
