@@ -108,7 +108,7 @@ export function AgregarServicio({ open, onOpenChange, onServicioCreado }: Props)
             <DialogClose asChild>
               <Button variant="outline" type="button">Cancelar</Button>
             </DialogClose>
-            <Button type="submit" className="bg-green-600 hover:bg-green-700">Guardar</Button>
+            <Button type="submit" className="bg-blue-600 hover:bg-blue-700">Guardar</Button>
           </DialogFooter>
         </form>
       </DialogContent>

@@ -58,7 +58,7 @@ export function TablaServicios() {
       <div className="mb-4 flex justify-between flex-col items-center">
         <Button 
           onClick={() => setOpenAgregar(true)}
-          className="bg-green-600 hover:bg-green-700"
+          className="bg-blue-600 hover:bg-blue-700"
         >
           <Plus className="w-4 h-4 mr-2" />
           Agregar Servicio
@@ -84,14 +84,14 @@ export function TablaServicios() {
               <TableCell className="w-[150px] text-center">
                 <button 
                   type="button"
-                  className="mr-2 bg-yellow-300 p-3 hover:bg-yellow-100 transition-colors rounded" 
+                  className="mr-2 bg-yellow-200 p-3 hover:bg-yellow-100 transition-colors rounded" 
                   onClick={() => handleEditClick(servicio)}
                 > 
                   <SquarePen className="w-4 h-4" />
                 </button>
                 <button 
                   type="button"
-                  className="bg-red-600 p-3 hover:bg-red-700 transition-colors rounded"
+                  className="bg-red-400 p-3 hover:bg-red-700 transition-colors rounded"
                   onClick={() => handleDeleteClick(servicio)}
                 > 
                   <Trash className="w-4 h-4" />
