@@ -119,7 +119,7 @@ export function EditarServicio({ open, onOpenChange, servicio, onServicioActuali
             <DialogClose asChild>
               <Button variant="outline" type="button">Cancelar</Button>
             </DialogClose>
-            <Button type="submit" className="bg-green-600 hover:bg-green-700">Guardar cambios</Button>
+            <Button type="submit" className="bg-blue-600 hover:bg-blue-700">Guardar cambios</Button>
           </DialogFooter>
         </form>
       </DialogContent>
