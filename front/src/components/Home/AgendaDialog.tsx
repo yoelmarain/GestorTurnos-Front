@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/dialog";
 import { getTurnosByProfesional } from "@/API/Public/SacarTurno";
 import { getServicios } from "@/API/Public/Servicios";
+import { updateEstadoTurno } from "@/API/Admin/Turnos";
+import { toast } from "sonner";
 import { Clock, CalendarDays, CheckCircle2, XCircle, Circle } from "lucide-react";
 
 interface Turno {
@@ -99,20 +101,47 @@ export function AgendaDialog({ open, onOpenChange, profesionalId, nombreProfesio
     const [servicios, setServicios] = useState<Servicio[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+    const [actualizando, setActualizando] = useState<number | null>(null);
+
+    const cargarTurnos = async () => {
+        try {
+            const [turnosData, serviciosData] = await Promise.all([
+                getTurnosByProfesional(profesionalId),
+                getServicios(),
+            ]);
+            setTurnos(turnosData);
+            setServicios(serviciosData);
+        } catch {
+            setError(true);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         if (!open) return;
         setLoading(true);
         setError(false);
-
-        Promise.all([getTurnosByProfesional(profesionalId), getServicios()])
-            .then(([turnosData, serviciosData]) => {
-                setTurnos(turnosData);
-                setServicios(serviciosData);
-            })
-            .catch(() => setError(true))
-            .finally(() => setLoading(false));
+        cargarTurnos();
     }, [open, profesionalId]);
+
+    const handleCambiarEstado = async (id: number, nuevoEstado: string) => {
+        setActualizando(id);
+        try {
+            await updateEstadoTurno(id, nuevoEstado);
+            toast.success(`Turno marcado como ${nuevoEstado}`, { position: "top-center" });
+            setTurnos((prev) =>
+                prev.map((t) => (t.id === id ? { ...t, estado: nuevoEstado } : t))
+            );
+        } catch (err) {
+            toast.error("Error al actualizar el turno", {
+                description: String(err),
+                position: "top-center",
+            });
+        } finally {
+            setActualizando(null);
+        }
+    };
 
     const getNombreServicio = (servicio: number | { id: number; nombre_servicio: string }) => {
         if (typeof servicio === "object" && servicio !== null) {
@@ -202,23 +231,50 @@ export function AgendaDialog({ open, onOpenChange, profesionalId, nombreProfesio
                                         {dia.turnos.map((turno) => {
                                             const hora = new Date(turno.fecha_turno);
                                             const horaStr = `${String(hora.getHours()).padStart(2, "0")}:${String(hora.getMinutes()).padStart(2, "0")}`;
+                                            const esReservado = turno.estado?.toLowerCase() === "reservado";
+                                            const cargando = actualizando === turno.id;
+
                                             return (
                                                 <div
                                                     key={turno.id}
-                                                    className="flex items-center justify-between bg-slate-900/60 rounded-lg px-3 py-2"
+                                                    className="flex items-center justify-between bg-slate-900/60 rounded-lg px-3 py-2 gap-2"
                                                 >
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="flex items-center gap-1.5 text-amber-400">
+                                                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                                                        <div className="flex items-center gap-1.5 text-amber-400 flex-shrink-0">
                                                             <Clock className="w-3.5 h-3.5" />
                                                             <span className="text-sm font-medium text-white">
                                                                 {horaStr}
                                                             </span>
                                                         </div>
-                                                        <span className="text-slate-300 text-sm">
+                                                        <span className="text-slate-300 text-sm truncate">
                                                             {getNombreServicio(turno.servicio)}
                                                         </span>
                                                     </div>
-                                                    {estadoBadge(turno.estado)}
+
+                                                    <div className="flex items-center gap-2 flex-shrink-0">
+                                                        {estadoBadge(turno.estado)}
+
+                                                        {esReservado && (
+                                                            <div className="flex items-center gap-1">
+                                                                <button
+                                                                    title="Marcar como Completado"
+                                                                    disabled={cargando}
+                                                                    onClick={() => handleCambiarEstado(turno.id, "Completado")}
+                                                                    className="p-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/25 text-emerald-400 transition-colors disabled:opacity-40"
+                                                                >
+                                                                    <CheckCircle2 className="w-3.5 h-3.5" />
+                                                                </button>
+                                                                <button
+                                                                    title="Cancelar turno"
+                                                                    disabled={cargando}
+                                                                    onClick={() => handleCambiarEstado(turno.id, "Cancelado")}
+                                                                    className="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/25 text-red-400 transition-colors disabled:opacity-40"
+                                                                >
+                                                                    <XCircle className="w-3.5 h-3.5" />
+                                                                </button>
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             );
                                         })}

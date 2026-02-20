@@ -4,6 +4,8 @@ import StaffPage from './pages/Public/Staff';
 import ReservasPage from './pages/Public/Reservas';
 import AdminHome from './pages/Admin/Home';
 import GestionPage from './pages/Admin/Gestion';
+import TurnosPage from './pages/Admin/Turnos';
+import ClientesPage from './pages/Admin/Clientes';
 
 const routes = [
     {
@@ -36,7 +38,18 @@ const routes = [
         title: 'Gestion',
         rol: 'admin'
     },
-    
+    {
+        path: '/turnos',
+        element: <TurnosPage />,
+        title: 'Turnos',
+        rol: 'admin'
+    },
+    {
+        path: '/clientes',
+        element: <ClientesPage />,
+        title: 'Clientes',
+        rol: 'admin'
+    },
 ]
 
 export default routes;
