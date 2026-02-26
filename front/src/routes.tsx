@@ -37,7 +37,7 @@ export function AppRouter() {
 
                 {/* Auth */}
                 <Route path="/auth/login" element={<LoginPage />} />
-                <Route path="/admin/login" element={<LoginPage />} />
+                {/* <Route path="/admin/login" element={<LoginPage />} /> */}
 
                 {/* Admin */}
                 <Route path="/admin" element={
