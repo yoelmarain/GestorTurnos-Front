@@ -1,23 +1,18 @@
-import { useRoutes } from 'react-router-dom';
-import routes from '../routes';
+import { Outlet, useRoutes } from 'react-router-dom';
 import { Header } from '@/components/Header/Header';
 
 export default function AdminLayout() {
-    const adminRoutes = routes.filter((route) => route.rol === 'admin');
-    const element = useRoutes(adminRoutes);
-
-    const LINK_ITEMS = adminRoutes
-        .map((route) => ({
-            title: route.title!,
-            url: route.path,
-            rol: route.rol!,
-        }));
+    
+    const navItems = [
+    { to: '/admin', label: 'Dashboard', end: true },
+    { to: '/admin/gestion', label: 'Gestión', end: false },
+    ];
 
     return (
         <>
             <div className=" min-h-screen bg-gradient-to-br from-black to-gray-900">
-             <Header linkItems={LINK_ITEMS} />
-             {element}
+             <Header navItems={navItems} />
+             <Outlet />
              </div>
         </>
     );

@@ -1,21 +1,23 @@
-import { Link, useLocation } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/Auth";
 
-interface LinkItem {
-  title: string;
-  url: string;
-  rol: string;
+interface NavItem {
+  to: string;
+  label: string;
+  end: boolean;
 }
 
 interface HeaderProps {
-  linkItems: LinkItem[];
+  navItems: NavItem[];
 }
 
-export function Header({ linkItems }: HeaderProps) {
-  const location = useLocation();
+export function Header({ navItems }: HeaderProps) {
+  const { logout, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
-  const isActive = (item: LinkItem) => {
-    const targetPath = `${item.rol}/${item.title}`.toLowerCase();
-    return location.pathname.toLowerCase().startsWith(`/${targetPath}`);
+  const handleLogout = () => {
+    logout();
+    navigate("/auth/login");
   };
 
   return (
@@ -29,30 +31,43 @@ export function Header({ linkItems }: HeaderProps) {
         </div>
       <nav className="container mx-auto py-4">
         <ul className="flex items-center justify-start space-x-4">
-          {linkItems.map((item, index) => (
+          {navItems.map((item, index) => (
             <li key={index} className="group">
-              <Link
-                to={`/${item.rol}/${item.url}`}
+              <NavLink
+                to={item.to}
+                end={item.end}
                 className="block"
               >
-                <div className={`flex flex-col items-center p-2 rounded-md transition-colors duration-200 ${
-                    isActive(item)
-                      ? "bg-gray-800/80 border border-gray-600" 
-                      : "bg-transparent group-hover:bg-gray-800/50"
-                  }`}>
-                  <span className={`text-lg font-medium transition-colors duration-200 ${
-                    isActive(item)
-                      ? "text-white" 
-                      : "text-gray-300 group-hover:text-white"
-                  }`}>
-                    {item.title}
-                  </span>
-                </div>
-              </Link>
+                {({ isActive }) => (
+                  <div className={`flex flex-col items-center p-2 rounded-md transition-colors duration-200 ${
+                      isActive
+                        ? "bg-gray-800/80 border border-gray-600"
+                        : "bg-transparent group-hover:bg-gray-800/50"
+                    }`}>
+                    <span className={`text-lg font-medium transition-colors duration-200 ${
+                      isActive
+                        ? "text-white"
+                        : "text-gray-300 group-hover:text-white"
+                    }`}>
+                      {item.label}
+                    </span>
+                  </div>
+                )}
+              </NavLink>
             </li>
           ))}
         </ul>
       </nav>
+      {isAuthenticated && (
+      <div className="px-4">
+        <button
+          onClick={handleLogout}
+          className="text-gray-300 hover:text-white border border-gray-700 hover:border-gray-500 hover:bg-gray-800/50 transition-colors duration-200 px-4 py-2 rounded-md text-sm font-medium"
+        >
+          Cerrar sesión
+        </button>
+      </div>
+      )}
     </header>
   );
 }

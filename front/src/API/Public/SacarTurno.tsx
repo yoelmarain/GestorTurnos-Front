@@ -3,7 +3,7 @@ const API_URL = 'http://localhost:8000';
 
 export const getSlots = async (idProfesional: number, idServicio: number) => {
   try {
-      const response = await fetch(`${API_URL}/profesionales/${idProfesional}/turnosLibres/${idServicio}/`);
+      const response = await fetch(`${API_URL}/api/profesionales/${idProfesional}/turnosLibres/${idServicio}/`);
       if (response.ok) {
           const data = await response.json();
           return data;
@@ -21,7 +21,7 @@ export const reservarTurno = async (
   servicio: number
 ) => {
   try {
-      const response = await fetch(`${API_URL}/turnos/`, {
+      const response = await fetch(`${API_URL}/api/turnos/`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',

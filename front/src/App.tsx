@@ -1,10 +1,9 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import PublicLayout from './layout/Public';
-import AuthLayout from './layout/Auth';
-import AdminLayout from './layout/Admin';
+
 import { Toaster } from "@/components/ui/sonner"
 import { useEffect } from 'react';
 import { toast } from "sonner"
+import { AppRouter } from "./routes";
+import { AuthContext, AuthProvider } from "./context/Auth";
 
 function App() {
 
@@ -30,14 +29,8 @@ function App() {
     }, []);
 
   return (
-    <>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/auth/*" element={<AuthLayout />} />
-        <Route path="/public/*" element={<PublicLayout />} />
-        <Route path="/admin/*" element={<AdminLayout />} />
-        <Route path="/" element={<Navigate to="/public/error" replace />} />
-      </Routes>
+    <AuthProvider>
+      <AppRouter />
       <Toaster 
         position="top-center"
         richColors
@@ -50,8 +43,7 @@ function App() {
           },
         }}
       />
-    </BrowserRouter>
-  </>
+  </AuthProvider>
   )
 }
 

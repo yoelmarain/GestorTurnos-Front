@@ -9,17 +9,44 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/Auth";
+import { toast } from "sonner";
 
 export default function LoginPage() {
+    const { login } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = (location.state as { from?: { pathname: string } })?.from?.pathname ?? '/admin';
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+
+    const handleSubmit = async (e: { preventDefault: () => void }) => {
+        e.preventDefault();
+        try {
+            await login(email, password); 
+            toast.success("Inicio de sesión exitoso", {
+            position: "top-center",
+            });
+            navigate(from, { replace: true });
+        } catch (error) {
+            console.error('Network error', error);
+            toast.error("Error al iniciar sesión", {
+            position: "top-center",
+            });
+        } 
+    };
+
     return (
-        <div className="flex flex-col items-center justify-center gap-8 p-6 w-96">
-            <div className="flex flex-col items-center gap-4">
-                <img 
+        <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 flex items-center justify-center p-6">
+        <div className="flex flex-col items-center gap-8 w-full max-w-md">
+            <img 
                     src="/logo.png" 
                     alt="Barber House Logo" 
                     className="h-28 w-auto drop-shadow-2xl"
                 />
-            </div>
 
            
             <Card className="w-full max-w-md border-gray-800 bg-black/40 ">
@@ -31,8 +58,8 @@ export default function LoginPage() {
                         Ingresa tus credenciales para continuar
                     </CardDescription>
                 </CardHeader>
+                <form className="space-y-4" onSubmit={handleSubmit}>
                 <CardContent>
-                    <form className="space-y-4">
                         <div className="space-y-1">
                             <Label htmlFor="email" className="text-gray-200">
                                 Email
@@ -41,6 +68,8 @@ export default function LoginPage() {
                                 id="email"
                                 type="email"
                                 placeholder="tu@email.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-gray-500"
                                 required
                             />
@@ -61,11 +90,12 @@ export default function LoginPage() {
                                 id="password" 
                                 type="password" 
                                 placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-gray-500"
                                 required 
                             />
-                        </div>
-                    </form>
+                        </div> 
                 </CardContent>
                 <CardFooter className="flex flex-col gap-3">
                     <Button 
@@ -105,7 +135,9 @@ export default function LoginPage() {
                         </a>
                     </div>
                 </CardFooter>
+                </form>
             </Card>
+        </div>
         </div>
     )
 }
