@@ -9,7 +9,7 @@ interface Servicio {
 
 export const getServicios = async () => {
   try {
-      const response = await fetch(`${API_URL}/servicios/`);
+      const response = await fetch(`${API_URL}/api/servicios/`);
       if (response.ok) {
           const data = await response.json();
           return data;
@@ -23,7 +23,7 @@ export const getServicios = async () => {
 
 export const createServicio = async (servicio: Servicio) => {
   try {
-    const response = await fetch(`${API_URL}/servicios/`, {
+    const response = await fetch(`${API_URL}/api/servicios/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ export const createServicio = async (servicio: Servicio) => {
 
 export const updateServicio = async (id: number, servicio: Servicio) => {
   try {
-    const response = await fetch(`${API_URL}/servicios/${id}/`, {
+    const response = await fetch(`${API_URL}/api/servicios/${id}/`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

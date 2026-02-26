@@ -5,38 +5,45 @@ import ReservasPage from './pages/Public/Reservas';
 import AdminHome from './pages/Admin/Home';
 import GestionPage from './pages/Admin/Gestion';
 
-const routes = [
-    {
-        path: '/reservar',
-        element: <ReservasPage />,
-        title: 'Reservar',
-        rol: 'public'
-    },
-    {
-        path: '/staff',
-        element: <StaffPage />,
-        title: 'Staff',
-        rol: 'public'
-    },
-    {
-        path: '/login',
-        element: <LoginPage />,
-        title: 'login',
-        rol: 'auth'
-    },
-    {
-        path: '/home',
-        element: <AdminHome />,
-        title: 'Home',
-        rol: 'admin'
-    },
-    {
-        path: '/gestion',
-        element: <GestionPage />,
-        title: 'Gestion',
-        rol: 'admin'
-    },
-    
-]
+import PublicLayout from './layout/Public';
+import AdminLayout from './layout/Admin';
 
-export default routes;
+
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+
+
+export function AppRouter() {
+    return (
+        <BrowserRouter>
+
+            <Routes>
+                {/* Public */}
+                <Route element={<PublicLayout />}>
+                    <Route path="/" element={<ReservasPage />} />
+                    <Route path="/staff" element={
+                        <StaffPage />
+                    } />
+                </Route>
+
+                {/* Auth */}
+                <Route path="/auth/login" element={<LoginPage />} />
+                <Route path="/admin/login" element={<LoginPage />} />
+
+                {/* Admin */}
+                <Route path="/admin" element={
+                    <AdminLayout />
+                }>
+                    <Route index element={<AdminHome />} />
+                    <Route path="gestion" element={<GestionPage />} />
+                </Route>
+
+                {/* Fallback */}
+                <Route path="*" element={<ErrorPage />} />
+            </Routes>
+        
+        </BrowserRouter>
+    )
+
+}
+
+

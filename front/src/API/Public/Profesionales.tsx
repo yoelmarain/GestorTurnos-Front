@@ -3,7 +3,7 @@ const API_URL = 'http://localhost:8000';
 
 export const getProfesionales = async () => {
   try {
-      const response = await fetch(`${API_URL}/profesionales/`);
+      const response = await fetch(`${API_URL}/api/profesionales/`);
       if (response.ok) {
           const data = await response.json();
           return data;
