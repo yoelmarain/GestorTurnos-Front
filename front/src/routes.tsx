@@ -8,6 +8,7 @@ import GestionPage from './pages/Admin/Gestion';
 import PublicLayout from './layout/Public';
 import AdminLayout from './layout/Admin';
 
+import { AdminRoute } from './components/Proteger/Admin';
 
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
@@ -31,7 +32,9 @@ export function AppRouter() {
 
                 {/* Admin */}
                 <Route path="/admin" element={
-                    <AdminLayout />
+                    <AdminRoute>
+                        <AdminLayout />
+                    </AdminRoute>
                 }>
                     <Route index element={<AdminHome />} />
                     <Route path="gestion" element={<GestionPage />} />

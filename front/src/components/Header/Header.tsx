@@ -1,4 +1,5 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/Auth";
 
 interface NavItem {
   to: string;
@@ -11,6 +12,14 @@ interface HeaderProps {
 }
 
 export function Header({ navItems }: HeaderProps) {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/auth/login");
+  };
+
   return (
     <header className="w-full bg-black/40 shadow-md shadow-white/20 flex direction-row items-center">
         <div className="flex flex-col items-center px-4">
@@ -49,6 +58,14 @@ export function Header({ navItems }: HeaderProps) {
           ))}
         </ul>
       </nav>
+      <div className="px-4">
+        <button
+          onClick={handleLogout}
+          className="text-gray-300 hover:text-white border border-gray-700 hover:border-gray-500 hover:bg-gray-800/50 transition-colors duration-200 px-4 py-2 rounded-md text-sm font-medium"
+        >
+          Cerrar sesión
+        </button>
+      </div>
     </header>
   );
 }

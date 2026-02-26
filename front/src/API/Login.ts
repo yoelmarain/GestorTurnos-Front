@@ -4,7 +4,7 @@ const API_URL = 'http://localhost:8000';
 
 export const FetchLogin = async ( email: string, password: string) => {
     try {
-        const response = await fetch(`${API_URL}/api/login/`, {
+        const response = await fetch(`${API_URL}/api/auth/login/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -14,9 +14,9 @@ export const FetchLogin = async ( email: string, password: string) => {
         if (response.ok) {
             const data = await response.json();
 
-            Cookies.set('token', data.access, { expires: 7 }); // Guarda el token en una cookie por 7 días
-            Cookies.set('refreshToken', data.refresh, { expires: 7 }); // Guarda el refresh token en una cookie por 7 días
-            Cookies.set('userId', data.user.id, { expires: 7 }); // Guarda el user ID en una cookie por 7 días
+            // dsp ver si se puede usar una cookie httpOnly para mayor seguridad, pero por ahora se guardan en cookies normales
+            Cookies.set('token', data.access, { expires: 7 });
+            Cookies.set('refreshToken', data.refresh, { expires: 7 });
 
             return data;
         } else {

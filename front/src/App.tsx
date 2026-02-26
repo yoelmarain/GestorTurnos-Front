@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { useEffect } from 'react';
 import { toast } from "sonner"
 import { AppRouter } from "./routes";
+import { AuthContext, AuthProvider } from "./context/Auth";
 
 function App() {
 
@@ -28,7 +29,7 @@ function App() {
     }, []);
 
   return (
-    <>
+    <AuthProvider>
       <AppRouter />
       <Toaster 
         position="top-center"
@@ -42,7 +43,7 @@ function App() {
           },
         }}
       />
-  </>
+  </AuthProvider>
   )
 }
 
