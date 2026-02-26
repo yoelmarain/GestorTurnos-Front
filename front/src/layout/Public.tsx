@@ -3,7 +3,8 @@ import { Header } from '@/components/Header/Header';
 
 export default function PublicLayout() {
     const navItems = [
-        { to: '/', label: 'Reservas', end: true },
+        { to: '/', label: 'Inicio', end: true },
+        { to: '/reservas', label: 'Reservas', end: false },
         { to: '/staff', label: 'Staff', end: false },
     ];
 

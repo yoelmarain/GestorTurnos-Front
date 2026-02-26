@@ -12,7 +12,7 @@ interface HeaderProps {
 }
 
 export function Header({ navItems }: HeaderProps) {
-  const { logout } = useAuth();
+  const { logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -58,6 +58,7 @@ export function Header({ navItems }: HeaderProps) {
           ))}
         </ul>
       </nav>
+      {isAuthenticated && (
       <div className="px-4">
         <button
           onClick={handleLogout}
@@ -66,6 +67,7 @@ export function Header({ navItems }: HeaderProps) {
           Cerrar sesión
         </button>
       </div>
+      )}
     </header>
   );
 }
