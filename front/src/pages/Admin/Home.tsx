@@ -1,6 +1,5 @@
 import KPIs from "@/components/Home/KPIs";
 import { HomeProfesionales } from "@/components/Home/Proximosturnos";
-import { Home } from "lucide-react";
 
 
 export default function AdminHome() {

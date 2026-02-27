@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { useEffect } from 'react';
 import { toast } from "sonner"
 import { AppRouter } from "./routes";
-import { AuthContext, AuthProvider } from "./context/Auth";
+import { AuthProvider } from "./context/Auth";
 
 function App() {
 

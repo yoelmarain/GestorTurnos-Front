@@ -1,6 +1,5 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/Auth';
-import { toast } from 'sonner';
 import { useEffect, useRef } from 'react';
 
 export function UsuarioRoute({ children }: { children: React.ReactNode }) {

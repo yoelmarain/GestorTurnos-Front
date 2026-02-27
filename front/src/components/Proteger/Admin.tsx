@@ -1,6 +1,5 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/Auth';
-import { toast } from 'sonner';
 import { useEffect, useRef } from 'react';
 
 export function AdminRoute({ children }: { children: React.ReactNode }) {
@@ -18,6 +17,6 @@ export function AdminRoute({ children }: { children: React.ReactNode }) {
     if (user?.role === 'admin') {
         return <>{children}</>;   // Si es admin, renderiza el componente hijo (AdminLayout)
     } else {
-        return <Navigate to="/auth/login" state={{ from: location }} replace />;
+        return <Navigate to="/admin/login" state={{ from: location }} replace />;
     }
 }
