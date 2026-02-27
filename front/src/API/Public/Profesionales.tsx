@@ -1,9 +1,15 @@
+import Cookies from "js-cookie";
 const API_URL = 'http://localhost:8000';
 
 
 export const getProfesionales = async () => {
   try {
-      const response = await fetch(`${API_URL}/api/profesionales/`);
+      const token = Cookies.get('token');
+      const response = await fetch(`${API_URL}/api/profesionales/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
       if (response.ok) {
           const data = await response.json();
           return data;

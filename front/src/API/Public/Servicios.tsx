@@ -1,4 +1,5 @@
 
+import Cookies from "js-cookie";
 const API_URL = 'http://localhost:8000';
 
 interface Servicio {
@@ -9,7 +10,12 @@ interface Servicio {
 
 export const getServicios = async () => {
   try {
-      const response = await fetch(`${API_URL}/api/servicios/`);
+      const token = Cookies.get('token');
+      const response = await fetch(`${API_URL}/api/servicios/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
       if (response.ok) {
           const data = await response.json();
           return data;
@@ -23,10 +29,12 @@ export const getServicios = async () => {
 
 export const createServicio = async (servicio: Servicio) => {
   try {
+    const token = Cookies.get('token');
     const response = await fetch(`${API_URL}/api/servicios/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify(servicio),
     });
@@ -44,10 +52,12 @@ export const createServicio = async (servicio: Servicio) => {
 
 export const updateServicio = async (id: number, servicio: Servicio) => {
   try {
+    const token = Cookies.get('token');
     const response = await fetch(`${API_URL}/api/servicios/${id}/`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify(servicio),
     });
@@ -65,8 +75,12 @@ export const updateServicio = async (id: number, servicio: Servicio) => {
 
 export const deleteServicio = async (id: number) => {
   try {
-    const response = await fetch(`${API_URL}/servicios/${id}/`, {
+    const token = Cookies.get('token');
+    const response = await fetch(`${API_URL}/api/servicios/${id}/`, {
       method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
     });
     if (response.ok) {
       return true;

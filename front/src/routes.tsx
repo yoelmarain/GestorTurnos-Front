@@ -1,5 +1,6 @@
 import ErrorPage from './pages/Error';
 import LoginPage from './pages/LoginPage';
+import LoginPageAdmin from './pages/Admin/LoginPage';
 import HomePage from './pages/Public/Home';
 import StaffPage from './pages/Public/Staff';
 import ReservasPage from './pages/Public/Reservas';
@@ -9,6 +10,7 @@ import GestionPage from './pages/Admin/Gestion';
 import PublicLayout from './layout/Public';
 import AdminLayout from './layout/Admin';
 
+// Para proteger rutas
 import { AdminRoute } from './components/Proteger/Admin';
 import { UsuarioRoute } from './components/Proteger/User';
 
@@ -37,7 +39,7 @@ export function AppRouter() {
 
                 {/* Auth */}
                 <Route path="/auth/login" element={<LoginPage />} />
-                {/* <Route path="/admin/login" element={<LoginPage />} /> */}
+                <Route path="/admin/login" element={<LoginPageAdmin />} />
 
                 {/* Admin */}
                 <Route path="/admin" element={
